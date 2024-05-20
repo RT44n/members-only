@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
 
-const Schema = mongoose.Schema();
+const { Schema } = mongoose; // Correct way to use Schema
 
 const userSchema = new Schema({
-  user_name: { type: String, required: true, max: 15 },
-  first_name: { type: String, required: true, max: 30 },
+  username: { type: String, required: true, max: 15 },
+  firstname: { type: String, required: true, max: 30 },
   password: { type: String, required: true },
   status: {
     type: String,
