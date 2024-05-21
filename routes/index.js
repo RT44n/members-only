@@ -7,8 +7,8 @@ const router = express.Router();
 const User = require("../models/user");
 
 /* GET home page. */
-router.get("/", (req, res, next) => {
-  res.render("index", { title: "Express" });
+app.get("/", (req, res) => {
+  res.render("index", { user: req.user });
 });
 
 router.get("/sign-up", (req, res, next) => {
