@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
 
-const Schema = mongoose.Schema();
+const { Schema } = mongoose; // Correct way to use Schema
 
 const messageSchema = new Schema({
   author: { type: Schema.Types.ObjectId, ref: "User", required: true },
-  date: { type: date, required: true },
-  title: { type: String, required: true, max: 20 },
-  message: { type: String, required: true, max: 3 },
+  date: { type: Date, required: true },
+  title: { type: String, required: true, maxlength: 20 },
+  message: { type: String, required: true, maxlength: 300 },
 });
 
-module.exports = mongoose.model("Messsage", messageSchema);
+module.exports = mongoose.model("Message", messageSchema);

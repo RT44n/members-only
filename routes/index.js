@@ -5,6 +5,7 @@ const LocalStrategy = require("passport-local").Strategy;
 
 const router = express.Router();
 const User = require("../models/user");
+const Message = require("../models/message");
 
 /* GET home page. */
 router.get("/", (req, res) => {
@@ -13,6 +14,10 @@ router.get("/", (req, res) => {
 
 router.get("/sign-up", (req, res, next) => {
   res.render("sign-up-form");
+});
+
+router.get("/message-form", (req, res, next) => {
+  res.render("message-form", { user: req.user });
 });
 
 router.post("/sign-up", async (req, res, next) => {
@@ -25,6 +30,22 @@ router.post("/sign-up", async (req, res, next) => {
       status: "regular",
     });
     const result = await user.save();
+    res.redirect("/");
+  } catch (err) {
+    return next(err);
+  }
+});
+
+router.post("/message-form", async (req, res, next) => {
+  try {
+    const message = new Message({
+      author: req.user,
+      date: new Date(),
+      title: req.body.title,
+      message: req.body.message,
+    });
+
+    const result = await message.save();
     res.redirect("/");
   } catch (err) {
     return next(err);
