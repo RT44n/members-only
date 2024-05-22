@@ -8,10 +8,14 @@ const User = require("../models/user");
 const Message = require("../models/message");
 
 /* GET home page. */
-router.get("/", (req, res) => {
-  res.render("index", { user: req.user });
+router.get("/", async (req, res, next) => {
+  try {
+    const messages = await Message.find().populate("author");
+    res.render("index", { user: req.user, messages });
+  } catch (err) {
+    next(err);
+  }
 });
-
 router.get("/sign-up", (req, res, next) => {
   res.render("sign-up-form");
 });

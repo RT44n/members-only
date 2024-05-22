@@ -2,17 +2,34 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title></title>
+    <title>Message Board</title>
   </head>
   <body>
-    <% if (user) {%>
-    <h1>Welcome back <%= user.username %></h1>
-
+    <% if (user) { %>
+    <h1>Welcome back, <%= user.username %>!</h1>
     <p>Here is the message board!</p>
     <a href="/log-out">LOG OUT</a>
     <a href="/message-form">POST MESSAGE</a>
+
+    <h2>Messages</h2>
+    <% if (messages && messages.length > 0) { %>
+    <ul>
+      <% messages.forEach(function(message) { %>
+      <li>
+        <strong><%= message.title %></strong> by <%= message.author.username
+        %><br />
+        <%= message.message %><br />
+        <em><%= message.date.toDateString() %></em>
+        <% if (user.status === 'admin') { %>
+        <button>Delete</button>
+        <% } %>
+      </li>
+      <% }); %>
+    </ul>
     <% } else { %>
-    <h1>please log in</h1>
+    <p>No messages yet.</p>
+    <% } %> <% } else { %>
+    <h1>Please log in</h1>
     <form action="/log-in" method="POST">
       <label for="username">Username</label>
       <input name="username" placeholder="username" type="text" />
@@ -20,6 +37,6 @@
       <input name="password" type="password" />
       <button>Log In</button>
     </form>
-    <%}%>
+    <% } %>
   </body>
 </html>
