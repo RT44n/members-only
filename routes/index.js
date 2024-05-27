@@ -2,6 +2,7 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
+const { body, validationResult } = require("express-validator");
 
 const router = express.Router();
 const User = require("../models/user");
@@ -16,6 +17,7 @@ router.get("/", async (req, res, next) => {
     next(err);
   }
 });
+
 router.get("/sign-up", (req, res, next) => {
   res.render("sign-up-form");
 });
@@ -24,24 +26,52 @@ router.get("/message-form", (req, res, next) => {
   res.render("message-form", { user: req.user });
 });
 
-router.post("/sign-up", async (req, res, next) => {
-  try {
-    const hashedPassword = await bcrypt.hash(req.body.password, 10); // Hash the password
+router.post(
+  "/sign-up",
+  // Validation and sanitization middleware
+  [
+    body("username")
+      .trim()
+      .isLength({ min: 1 })
+      .escape()
+      .withMessage("Username is required"),
+    body("firstname")
+      .trim()
+      .isLength({ min: 1 })
+      .escape()
+      .withMessage("First name is required"),
+    body("password")
+      .isLength({ min: 6 })
+      .withMessage("Password must be at least 6 characters long"),
+  ],
+  async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      // There are validation errors, render form again with sanitized values/error messages
+      return res.render("sign-up-form", {
+        errors: errors.array(),
+        user: req.body,
+      });
+    }
 
-    const user = new User({
-      username: req.body.username,
-      firstname: req.body.firstname,
-      password: hashedPassword,
-    });
-    if (req.body.secret === "0000") {
-      user.status = "admin";
-    } else user.status = "regular";
-    const result = await user.save();
-    res.redirect("/");
-  } catch (err) {
-    return next(err);
+    try {
+      const hashedPassword = await bcrypt.hash(req.body.password, 10); // Hash the password
+      const user = new User({
+        username: req.body.username,
+        firstname: req.body.firstname,
+        password: hashedPassword,
+      });
+      if (req.body.secret === "0000") {
+        user.status = "admin";
+      } else user.status = "regular";
+
+      const result = await user.save();
+      res.redirect("/");
+    } catch (err) {
+      return next(err);
+    }
   }
-});
+);
 
 router.post("/message-form", async (req, res, next) => {
   try {
@@ -78,6 +108,7 @@ passport.use(
     }
   })
 );
+
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
