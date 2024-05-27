@@ -10,25 +10,7 @@
     <p>Here is the message board!</p>
     <a href="/log-out">LOG OUT</a>
     <a href="/message-form">POST MESSAGE</a>
-
-    <h2>Messages</h2>
-    <% if (messages && messages.length > 0) { %>
-    <ul>
-      <% messages.forEach(function(message) { %>
-      <li>
-        <strong><%= message.title %></strong> by <%= message.author.username
-        %><br />
-        <%= message.message %><br />
-        <em><%= message.date.toDateString() %></em>
-        <% if (user.status === 'admin') { %>
-        <button>Delete</button>
-        <% } %>
-      </li>
-      <% }); %>
-    </ul>
     <% } else { %>
-    <p>No messages yet.</p>
-    <% } %> <% } else { %>
     <h1>Please log in</h1>
     <form action="/log-in" method="POST">
       <label for="username">Username</label>
@@ -37,6 +19,27 @@
       <input name="password" type="password" />
       <button>Log In</button>
     </form>
+    <% } %>
+
+    <h2>Messages</h2>
+    <% if (messages && messages.length > 0) { %>
+    <ul>
+      <% messages.forEach(function(message) { %>
+      <li>
+        <% if (user) { %>
+        <strong>Author:</strong> <%= message.author.username %><br />
+        <em>Date:</em> <%= message.date.toDateString() %><br />
+        <% } %>
+        <strong>Title:</strong> <%= message.title %><br />
+        <strong>Message:</strong> <%= message.message %><br />
+        <% if (user && user.status === 'admin') { %>
+        <button type="submit">Delete</button>
+        <% } %>
+      </li>
+      <% }); %>
+    </ul>
+    <% } else { %>
+    <p>No messages yet.</p>
     <% } %>
   </body>
 </html>
