@@ -27,12 +27,15 @@ router.get("/message-form", (req, res, next) => {
 router.post("/sign-up", async (req, res, next) => {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10); // Hash the password
+
     const user = new User({
       username: req.body.username,
       firstname: req.body.firstname,
       password: hashedPassword,
-      status: "regular",
     });
+    if (req.body.secret === "0000") {
+      user.status = "admin";
+    } else user.status = "regular";
     const result = await user.save();
     res.redirect("/");
   } catch (err) {
@@ -104,4 +107,22 @@ router.get("/log-out", (req, res, next) => {
     res.redirect("/");
   });
 });
+
+router.post("/delete-message", async (req, res, next) => {
+  const { messageId } = req.body;
+  const { user } = req;
+
+  if (user && user.status === "admin") {
+    try {
+      await Message.findByIdAndDelete(messageId);
+      res.redirect("/");
+    } catch (error) {
+      console.error("Error deleting message:", error);
+      res.status(500).send("Internal Server Error");
+    }
+  } else {
+    res.status(403).send("Forbidden");
+  }
+});
+
 module.exports = router;

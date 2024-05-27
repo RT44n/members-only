@@ -19,6 +19,8 @@
       <input name="password" type="password" />
       <button>Log In</button>
     </form>
+    <a href="/sign-up">SIGN-UP</a>
+
     <% } %>
 
     <h2>Messages</h2>
@@ -33,7 +35,11 @@
         <strong>Title:</strong> <%= message.title %><br />
         <strong>Message:</strong> <%= message.message %><br />
         <% if (user && user.status === 'admin') { %>
-        <button type="submit">Delete</button>
+        <form action="/delete-message" method="POST">
+          <input type="hidden" name="messageId" value="<%= message._id %>" />
+          <button type="submit">Delete</button>
+        </form>
+
         <% } %>
       </li>
       <% }); %>
