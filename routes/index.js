@@ -61,7 +61,7 @@ router.post(
         firstname: req.body.firstname,
         password: hashedPassword,
       });
-      if (req.body.secret === "0000") {
+      if (req.body.secret === process.env.SECRET) {
         user.status = "admin";
       } else user.status = "regular";
 
