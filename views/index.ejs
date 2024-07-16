@@ -3,15 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <title>Message Board</title>
+    <link href="/stylesheets/style.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
     <% if (user) { %>
-    <h1>Welcome back, <%= user.username %>!</h1>
-    <p>Here is the message board!</p>
-    <a href="/log-out">LOG OUT</a>
-    <a href="/message-form">POST MESSAGE</a>
+    <div class="header_signedin">
+      <h1 class="action_message">Welcome back, <%= user.username %>!</h1>
+      <p>Here is the message board!</p>
+      <a href="/log-out">LOG OUT</a>
+      <a href="/message-form">POST MESSAGE</a>
+    </div>
     <% } else { %>
-    <h1>Please log in</h1>
+    <h1 class="action_message">Please log in</h1>
     <form action="/log-in" method="POST">
       <label for="username">Username</label>
       <input name="username" placeholder="username" type="text" />
@@ -20,32 +23,34 @@
       <button>Log In</button>
     </form>
     <a href="/sign-up">SIGN-UP</a>
-
     <% } %>
 
     <h2>Messages</h2>
     <% if (messages && messages.length > 0) { %>
-    <ul>
+    <ul class="message-list">
       <% messages.forEach(function(message) { %>
-      <li>
+      <li class="message-item">
         <% if (user) { %>
-        <strong>Author:</strong> <%= message.author.username %><br />
-        <em>Date:</em> <%= message.date.toDateString() %><br />
+        <div class="message-header">
+          <strong>Author:</strong> <%= message.author.username %><br />
+          <em>Date:</em> <%= message.date.toDateString() %><br />
+        </div>
         <% } %>
-        <strong>Title:</strong> <%= message.title %><br />
-        <strong>Message:</strong> <%= message.message %><br />
+        <div class="message-content">
+          <strong>Title:</strong> <%= message.title %><br />
+          <strong>Message:</strong> <%= message.message %><br />
+        </div>
         <% if (user && user.status === 'admin') { %>
         <form action="/delete-message" method="POST">
           <input type="hidden" name="messageId" value="<%= message._id %>" />
           <button type="submit">Delete</button>
         </form>
-
         <% } %>
       </li>
       <% }); %>
     </ul>
     <% } else { %>
-    <p>No messages yet.</p>
+    <p class="no-messages">No messages yet.</p>
     <% } %>
   </body>
 </html>

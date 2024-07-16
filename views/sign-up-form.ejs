@@ -1,20 +1,46 @@
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title></title>
+    <title>Sign Up</title>
+    <link href="/stylesheets/signup.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
     <h1>Sign Up</h1>
-    <form action="" method="POST">
+    <form action="" method="POST" class="signup-form">
       <label for="username">Username</label>
-      <input name="username" placeholder="username" type="text" />
+      <input
+        name="username"
+        placeholder="Enter your username"
+        type="text"
+        required
+      />
+
       <label for="firstname">First Name</label>
-      <input name="firstname" placeholder="firstname" type="text" />
+      <input
+        name="firstname"
+        placeholder="Enter your first name"
+        type="text"
+        required
+      />
+
       <label for="password">Password</label>
-      <input name="password" type="password" />
+      <input
+        name="password"
+        placeholder="Enter your password"
+        type="password"
+        required
+      />
+
       <label for="secret">Secret code for admin access</label>
-      <input type="number" name="secret" id="secret" />
-      <button>Sign Up</button>
+      <input
+        name="secret"
+        type="number"
+        placeholder="Enter secret code"
+        required
+      />
+
+      <button type="submit">Sign Up</button>
     </form>
   </body>
 </html>

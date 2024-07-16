@@ -11,7 +11,7 @@ const Message = require("../models/message");
 /* GET home page. */
 router.get("/", async (req, res, next) => {
   try {
-    const messages = await Message.find().populate("author");
+    const messages = await Message.find().sort({ date: -1 }).populate("author");
     res.render("index", { user: req.user, messages });
   } catch (err) {
     next(err);

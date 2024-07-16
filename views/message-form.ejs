@@ -1,10 +1,10 @@
-<% if (user) {%>
-<form action="" method="POST">
-  from: <%= user.username %>
+<% if (user) { %>
+<form action="" method="POST" class="message-form">
+  <p class="form-info">From: <%= user.username %></p>
   <label for="title">Title:</label>
-  <input name="title" type="text" />
-  <label for="messgae">Message:</label>
-  <input name="message" type="text" />
-  <button>Submit!</button>
+  <input name="title" type="text" class="message-title" />
+  <label for="message">Message:</label>
+  <input name="message" type="text" class="message-text" />
+  <button type="submit" class="submit-button">Submit!</button>
 </form>
-<%} else { %> Please login <%}%>
+<% } else { %> Please login <% } %>
